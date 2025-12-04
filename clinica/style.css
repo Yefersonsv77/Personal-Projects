@@ -1,0 +1,21 @@
+.nav-pills .nav-link.active {
+    background-color: #007bff;
+}
+.card {
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+.table-responsive {
+    max-height: 400px;
+    overflow-y: auto;
+}
+.btn-group-sm > .btn, .btn-sm {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.875rem;
+}
+.alert {
+    margin-top: 1rem;
+}
+.estado-badge {
+    font-size: 0.75rem;
+}

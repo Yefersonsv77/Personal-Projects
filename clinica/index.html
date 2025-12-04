@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Gestión Clínica</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="style.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+    <div class="container-fluid py-4">
+        <div class="row">
+            <div class="col-12">
+                <h1 class="text-center mb-4">
+                    <i class="fas fa-clinic-medical text-primary"></i>
+                    Sistema de Gestión Clínica
+                </h1>
+            </div>
+        </div>
+
+        <!-- Navigation Tabs -->
+        <div class="row mb-4">
+            <div class="col-12">
+                <ul class="nav nav-pills justify-content-center" id="mainTabs" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="pacientes-tab" data-bs-toggle="pill" data-bs-target="#pacientes" type="button" role="tab">
+                            <i class="fas fa-users"></i> Pacientes
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="citas-tab" data-bs-toggle="pill" data-bs-target="#citas" type="button" role="tab">
+                            <i class="fas fa-calendar-check"></i> Citas
+                        </button>
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="tab-content" id="mainTabsContent">
+            <!-- Sección Pacientes -->
+            <div class="tab-pane fade show active" id="pacientes" role="tabpanel">
+                <div class="row">
+                    <!-- Formulario Pacientes -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-primary text-white">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-user-plus"></i>
+                                    <span id="pacienteFormTitle">Crear Paciente</span>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="pacienteForm">
+                                    <input type="hidden" id="pacienteId">
+                                    <div class="mb-3">
+                                        <label for="pacienteNombre" class="form-label">Nombre Completo *</label>
+                                        <input type="text" class="form-control" id="pacienteNombre" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="pacienteDocumento" class="form-label">Documento *</label>
+                                        <input type="text" class="form-control" id="pacienteDocumento" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="pacienteTelefono" class="form-label">Teléfono *</label>
+                                        <input type="tel" class="form-control" id="pacienteTelefono" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="pacienteCorreo" class="form-label">Correo Electrónico *</label>
+                                        <input type="email" class="form-control" id="pacienteCorreo" required>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-primary">
+                                            <i class="fas fa-save"></i> <span id="pacienteSubmitText">Crear Paciente</span>
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" id="cancelarPaciente" style="display: none;">
+                                            <i class="fas fa-times"></i> Cancelar
+                                        </button>
+                                    </div>
+                                </form>
+                                <div id="pacienteAlert"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista Pacientes -->
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-list"></i> Lista de Pacientes
+                                </h5>
+                                <button class="btn btn-light btn-sm" onclick="cargarPacientes()">
+                                    <i class="fas fa-sync-alt"></i> Actualizar
+                                </button>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Nombre</th>
+                                                <th>Documento</th>
+                                                <th>Teléfono</th>
+                                                <th>Correo</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tablaPacientes">
+                                            <tr>
+                                                <td colspan="6" class="text-center py-4">
+                                                    <i class="fas fa-spinner fa-spin"></i> Cargando pacientes...
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Sección Citas -->
+            <div class="tab-pane fade" id="citas" role="tabpanel">
+                <div class="row">
+                    <!-- Formulario Citas -->
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header bg-success text-white">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-calendar-plus"></i>
+                                    <span id="citaFormTitle">Crear Cita</span>
+                                </h5>
+                            </div>
+                            <div class="card-body">
+                                <form id="citaForm">
+                                    <input type="hidden" id="citaId">
+                                    <div class="mb-3">
+                                        <label for="citaPacienteId" class="form-label">Paciente *</label>
+                                        <select class="form-select" id="citaPacienteId" required>
+                                            <option value="">Seleccionar paciente...</option>
+                                        </select>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="citaFecha" class="form-label">Fecha *</label>
+                                        <input type="date" class="form-control" id="citaFecha" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="citaHora" class="form-label">Hora *</label>
+                                        <input type="time" class="form-control" id="citaHora" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="citaOdontologo" class="form-label">Odontólogo *</label>
+                                        <input type="text" class="form-control" id="citaOdontologo" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="citaEstado" class="form-label">Estado *</label>
+                                        <select class="form-select" id="citaEstado" required>
+                                            <option value="Pendiente">Pendiente</option>
+                                            <option value="Confirmada">Confirmada</option>
+                                            <option value="Cancelada">Cancelada</option>
+                                        </select>
+                                    </div>
+                                    <div class="d-grid gap-2">
+                                        <button type="submit" class="btn btn-success">
+                                            <i class="fas fa-save"></i> <span id="citaSubmitText">Crear Cita</span>
+                                        </button>
+                                        <button type="button" class="btn btn-secondary" id="cancelarCita" style="display: none;">
+                                            <i class="fas fa-times"></i> Cancelar
+                                        </button>
+                                    </div>
+                                </form>
+                                <div id="citaAlert"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Lista Citas -->
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
+                                <h5 class="mb-0">
+                                    <i class="fas fa-calendar-alt"></i> Lista de Citas
+                                </h5>
+                                <button class="btn btn-dark btn-sm" onclick="cargarCitas()">
+                                    <i class="fas fa-sync-alt"></i> Actualizar
+                                </button>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive">
+                                    <table class="table table-hover mb-0">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Paciente ID</th>
+                                                <th>Fecha</th>
+                                                <th>Hora</th>
+                                                <th>Odontólogo</th>
+                                                <th>Estado</th>
+                                                <th>Acciones</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="tablaCitas">
+                                            <tr>
+                                                <td colspan="7" class="text-center py-4">
+                                                    <i class="fas fa-spinner fa-spin"></i> Cargando citas...
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <script src="script.js"></script>
+    
+</body>
+</html>
